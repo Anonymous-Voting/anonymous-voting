@@ -1,4 +1,16 @@
+packages/hardhat/artifacts/*
+packages/hardhat/artifacts/*/*
+packages/hardhat/artifacts/*/*/*
+packages/hardhat/artifacts/*/*/*/*
+packages/hardhat/cache/*
+packages/hardhat/cache/*/*
+packages/hardhat/cache/*/*/*
+packages/hardhat/cache/*/*/*/*
+
 build
 node_modules
 package-lock.json
+package.json
 yarn-error.log
+.env
+log
