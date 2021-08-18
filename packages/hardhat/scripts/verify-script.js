@@ -15,11 +15,11 @@ async function main() {
 
   // We get the contract to deploy
 
-  const cashTokenAddress = "0x86B60b67EC6Beeb4633e3C47349cf6d2655C80B6"; 
-  const innerProductVerifierAddress = "0x73d78d5b4330F02C0699f677e376F84B81A43515"; 
-  const zetherVerifierAddress = "0x530Af17eba6888F9887A76ce1008Bae3d7C44792"; 
-  const burnVerifierAddress = "0x187ad6DE79f43D28Fb683641af749965263948ed"; 
-  const ZSCAddress = "0x9c537BD6ca638Aefa03F749b8E18166160dEF446"; 
+  const cashTokenAddress = "0x6190CaFbFC010b94e21678534c6259204E015B86"; 
+  const innerProductVerifierAddress = "0x207eb5A12045e5e203A214646a2ba55733C78079"; 
+  const zetherVerifierAddress = "0x97E34472320bfdb1714e5C6943816cb8a1ca599a"; 
+  const burnVerifierAddress = "0x7e3c3b125Bc6Afd4C78EdB516E7740BB584DaD0f"; 
+  const ZSCAddress = "0x327822092B19D55248D0F6A745828Fc90c99953E"; 
   
   await hre.run("verify:verify", {
 		address: cashTokenAddress,
@@ -43,7 +43,7 @@ async function main() {
 
   await hre.run("verify:verify", {
 		address: ZSCAddress,
-		constructorArguments: [cashTokenAddress, zetherVerifierAddress, BurnVerifierAddress, "6"],
+		constructorArguments: [cashTokenAddress, zetherVerifierAddress, burnVerifierAddress, "6"],
 	});
 }
 
