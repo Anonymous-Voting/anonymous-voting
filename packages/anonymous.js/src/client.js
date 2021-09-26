@@ -65,7 +65,7 @@ class Client {
                                 const value = utils.readBalance(parameters['C'][i], parameters['D'], account.keypair['x']);
                                 if (value > 0) {
                                     account._state.pending += value;
-                                    console.log("Transfer of " + value + " received! Balance now " + (account._state.available + account._state.pending) + ".");
+                                    console.log(value + " vote received! Vote number is now " + (account._state.available + account._state.pending) + ".");
                                 }
                             });
                         });
@@ -160,55 +160,55 @@ class Client {
             });
         };
 
-        this.deposit = (value) => {
+        this.initialize = (value) => {
             if (this.account.keypair === undefined)
                 throw "Client's account is not yet registered!";
             const account = this.account;
-            console.log("Initiating deposit.");
+            console.log("Initiating.");
             return new Promise((resolve, reject) => {
                 zsc.methods.fund(bn128.serialize(account.keypair['y']), value).send({ 'from': home, 'gas': 6721975 })
                     .on('transactionHash', (hash) => {
-                        console.log("Deposit submitted (txHash = \"" + hash + "\").");
+                        console.log("Initialization submitted (txHash = \"" + hash + "\").");
                     })
                     .on('receipt', (receipt) => {
                         account._state = account._simulate(); // have to freshly call it
                         account._state.pending += value;
-                        console.log("Deposit of " + value + " was successful. Balance now " + (account._state.available + account._state.pending) + ".");
+                        console.log("Initialization of " + value + " vote was successful. Vote number is now " + (account._state.available + account._state.pending) + ".");
                         resolve(receipt);
                     })
                     .on('error', (error) => {
-                        console.log("Deposit failed: " + error);
+                        console.log("Initialization failed: " + error);
                         reject(error);
                     });
             });
         };
 
-        this.transfer = (name, value, decoys, beneficiary) => { // todo: make sure the beneficiary is registered.
+        this.castBallot = (name, value, decoys, beneficiary) => { // todo: make sure the beneficiary is registered.
             if (this.account.keypair === undefined)
                 throw "Client's account is not yet registered!";
             decoys = decoys ? decoys : [];
             const account = this.account;
             const state = account._simulate();
             if (value + fee > state.available + state.pending)
-                throw "Requested transfer amount of " + value + " (plus fee of " + fee + ") exceeds account balance of " + (state.available + state.pending) + ".";
+                throw "Requested vote transfer amount of " + value + " (plus fee of " + fee + ") exceeds vote number of " + (state.available + state.pending) + ".";
             const wait = away();
             const seconds = Math.ceil(wait / 1000);
             const plural = seconds === 1 ? "" : "s";
             if (value > state.available) {
-                console.log("Your transfer has been queued. Please wait " + seconds + " second" + plural + ", for the release of your funds...");
-                return sleep(wait).then(() => this.transfer(name, value, decoys, beneficiary));
+                console.log("Your vote transfer has been queued. Please wait " + seconds + " second" + plural + ", for the release of your votes...");
+                return sleep(wait).then(() => this.castBallot(name, value, decoys, beneficiary));
             }
             if (state.nonceUsed) {
-                console.log("Your transfer has been queued. Please wait " + seconds + " second" + plural + ", until the next epoch...");
-                return sleep(wait).then(() => this.transfer(name, value, decoys, beneficiary));
+                console.log("Your vote transfer has been queued. Please wait " + seconds + " second" + plural + ", until the next epoch...");
+                return sleep(wait).then(() => this.castBallot(name, value, decoys, beneficiary));
             }
             const size = 2 + decoys.length;
             const estimated = estimate(size, false); // see notes above
             if (estimated > epochLength * 1000)
                 throw "The anonset size (" + size + ") you've requested might take longer than the epoch length (" + epochLength + " seconds) to prove. Consider re-deploying, with an epoch length at least " + Math.ceil(estimate(size, true) / 1000) + " seconds.";
             if (estimated > wait) {
-                console.log(wait < 3100 ? "Initiating transfer." : "Your transfer has been queued. Please wait " + seconds + " second" + plural + ", until the next epoch...");
-                return sleep(wait).then(() => this.transfer(name, value, decoys, beneficiary));
+                console.log(wait < 3100 ? "Initiating transfer." : "Your vote transfer has been queued. Please wait " + seconds + " second" + plural + ", until the next epoch...");
+                return sleep(wait).then(() => this.castBallot(name, value, decoys, beneficiary));
             }
             if (size & (size - 1)) {
                 let previous = 1;
@@ -221,13 +221,13 @@ class Client {
             }
             const friends = this.friends.show();
             if (!(name in friends))
-                throw "Name \"" + name + "\" hasn't been friended yet!";
+                throw "Name \"" + name + "\" hasn't been add yet!";
             if (account.keypair['y'].eq(friends[name]))
-                throw "Sending to yourself is currently unsupported (and useless!)."
+                throw "Voting to yourself is currently unsupported (and useless!)."
             const y = [account.keypair['y'], friends[name]]; // not yet shuffled
             decoys.forEach((decoy) => {
                 if (!(decoy in friends))
-                    throw "Decoy \"" + decoy + "\" is unknown in friends directory!";
+                    throw "Decoy \"" + decoy + "\" is unknown in connection directory!";
                 y.push(friends[decoy]);
             });
             if (beneficiary !== undefined && !(beneficiary in friends))
@@ -263,27 +263,74 @@ class Client {
                     const proof = Service.proveTransfer(Cn, C, y, state.lastRollOver, account.keypair['x'], r, value, state.available - value - fee, index, fee);
                     const u = utils.u(state.lastRollOver, account.keypair['x']);
                     const throwaway = web3.eth.accounts.create();
+                    // const rawTransaction = {
+                    //     from: home,
+                    //     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')), 
+                    //     gas: web3.utils.toHex(6721975), 
+                    //     to: throwaway.address,
+                    //     value: web3.utils.toHex(web3.utils.toWei('0.2', 'ether'))
+                    // };
+					// web3.eth.accounts.signTransaction(rawTransaction, '0x1d01a92f2f2108b444c40192d75c7d1a4fcae8ad7c958f431e0ed2e5fac3064e').then((signed) => {
+                    //     console.log(3);
+                    //     web3.eth.sendSignedTransaction(signed.rawTransaction)
+                    //         .on('transactionHash', (hash) => {
+                    //             console.log("Transfer submitted (txHash = \"" + hash + "\").");
+                    //         })
+                    //         .on('receipt', (receipt) => {
+                    //             console.log("Transfer of was successful.");
+                    //             resolve(receipt);
+                    //         })
+                    //         .on('error', (error) => {
+                    //             console.log("Transfer failed: " + error);
+                    //             reject(error);
+                    //         });
+					// });
                     const beneficiaryKey = beneficiary === undefined ? bn128.zero : friends[beneficiary];
-                    const encoded = zsc.methods.transfer(C.map((ciphertext) => bn128.serialize(ciphertext.left())), bn128.serialize(D), y.map(bn128.serialize), bn128.serialize(u), proof.serialize(), bn128.serialize(beneficiaryKey)).encodeABI();
-                    const tx = { 'to': zsc._address, 'data': encoded, 'gas': 6721975, 'nonce': 0 };
-                    web3.eth.accounts.signTransaction(tx, throwaway.privateKey).then((signed) => {
-                        web3.eth.sendSignedTransaction(signed.rawTransaction)
-                            .on('transactionHash', (hash) => {
-                                transfers.add(hash);
-                                console.log("Transfer submitted (txHash = \"" + hash + "\").");
-                            })
-                            .on('receipt', (receipt) => {
-                                account._state = account._simulate(); // have to freshly call it
-                                account._state.nonceUsed = true;
-                                account._state.pending -= value + fee;
-                                console.log("Transfer of " + value + " (with fee of " + fee + ") was successful. Balance now " + (account._state.available + account._state.pending) + ".");
-                                resolve(receipt);
-                            })
-                            .on('error', (error) => {
-                                console.log("Transfer failed: " + error);
-                                reject(error);
-                            });
-                    });
+                    // const encoded = zsc.methods.transfer(C.map((ciphertext) => bn128.serialize(ciphertext.left())), bn128.serialize(D), y.map(bn128.serialize), bn128.serialize(u), proof.serialize(), bn128.serialize(beneficiaryKey)).encodeABI();
+                    // const tx = { 
+                    //     to: zsc._address, 
+                    //     data: encoded, 
+                    //     gas: web3.utils.toHex(6721975), 
+                    //     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')), 
+                    //     value: web3.utils.toHex(web3.utils.toWei('0', 'ether')) 
+                    // };
+                    // web3.eth.accounts.signTransaction(tx, throwaway.privateKey).then((signed) => {
+                    //     web3.eth.sendSignedTransaction(signed.rawTransaction)
+                    //         .on('transactionHash', (hash) => {
+                    //             transfers.add(hash);
+                    //             console.log("Transfer submitted (txHash = \"" + hash + "\").");
+                    //         })
+                    //         .on('receipt', (receipt) => {
+                    //             account._state = account._simulate(); // have to freshly call it
+                    //             account._state.nonceUsed = true;
+                    //             account._state.pending -= value + fee;
+                    //             console.log("Transfer of " + value + " (with fee of " + fee + ") was successful. Balance now " + (account._state.available + account._state.pending) + ".");
+                    //             resolve(receipt);
+                    //         })
+                    //         .on('error', (error) => {
+                    //             console.log("Transfer failed: " + error);
+                    //             reject(error);
+                    //         });
+                    // });
+                    zsc.methods.transfer(C.map((ciphertext) => bn128.serialize(ciphertext.left())), bn128.serialize(D), y.map(bn128.serialize), bn128.serialize(u), proof.serialize(), bn128.serialize(beneficiaryKey)).send({ 
+                        from: home,
+                        gas: web3.utils.toHex(6721975)
+                    })
+                        .on('transactionHash', (hash) => {
+                            transfers.add(hash);
+                            console.log("Casting ballot submitted (txHash = \"" + hash + "\").");
+                        })
+                        .on('receipt', (receipt) => {
+                            account._state = account._simulate(); // have to freshly call it
+                            account._state.nonceUsed = true;
+                            account._state.pending -= value + fee;
+                            console.log("Casting ballot of " + value + " (with fee of " + fee + ") was successful. vote number is now " + (account._state.available + account._state.pending) + ".");
+                            resolve(receipt);
+                        })
+                        .on('error', (error) => {
+                            console.log("Casting ballot failed: " + error);
+                            reject(error);
+                        });
                 });
             });
         };
@@ -294,12 +341,12 @@ class Client {
             const account = this.account;
             const state = account._simulate();
             if (value > state.available + state.pending)
-                throw "Requested withdrawal amount of " + value + " exceeds account balance of " + (state.available + state.pending) + ".";
+                throw "Requested withdrawal amount of " + value + " votes exceeds vote number of " + (state.available + state.pending) + ".";
             const wait = away();
             const seconds = Math.ceil(wait / 1000);
             const plural = seconds === 1 ? "" : "s";
             if (value > state.available) {
-                console.log("Your withdrawal has been queued. Please wait " + seconds + " second" + plural + ", for the release of your funds...");
+                console.log("Your withdrawal has been queued. Please wait " + seconds + " second" + plural + ", for the release of your votes...");
                 return sleep(wait).then(() => this.withdraw(value));
             }
             if (state.nonceUsed) {
@@ -325,7 +372,7 @@ class Client {
                                 account._state = account._simulate(); // have to freshly call it
                                 account._state.nonceUsed = true;
                                 account._state.pending -= value;
-                                console.log("Withdrawal of " + value + " was successful. Balance now " + (account._state.available + account._state.pending) + ".");
+                                console.log("Withdrawal of " + value + " vote was successful. Vote number is now " + (account._state.available + account._state.pending) + ".");
                                 resolve(receipt);
                             }).on('error', (error) => {
                                 console.log("Withdrawal failed: " + error);

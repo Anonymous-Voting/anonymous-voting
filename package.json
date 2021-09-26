@@ -13,6 +13,9 @@
   "dependencies": {
     "bn.js": "^5.1.1",
     "elliptic": "^6.5.1",
-    "web3": "^1.2.4"
+    "ethereumjs-tx": "^2.1.2",
+    "web3": "^1.5.2",
+    "web3-eth-abi": "^1.5.2",
+    "web3-utils": "^1.5.2"
   }
 }

@@ -13,4 +13,4 @@ package-lock.json
 package.json
 yarn-error.log
 .env
-log
+log*

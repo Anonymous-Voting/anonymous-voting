@@ -9,6 +9,7 @@ require("@nomiclabs/hardhat-truffle5");
 require("@nomiclabs/hardhat-web3");
 require("@nomiclabs/hardhat-etherscan");
 require('@openzeppelin/hardhat-upgrades');
+require("@nomiclabs/hardhat-ganache");
 // require("@nomiclabs/hardhat-vyper");
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -28,7 +29,7 @@ task("accounts", "Prints the list of accounts", async () => {
  * @type import('hardhat/config').HardhatUserConfig
  */
  module.exports = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "BSCTestnet",
   networks: {
   // hardhat: {
   // 	forking: {
@@ -70,13 +71,21 @@ task("accounts", "Prints the list of accounts", async () => {
   // 	gasPrice: "auto", 
   // 	gasMultiplier: 1.2
   // },
-  rinkeby: {
-    url:`https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+  // rinkeby: {
+  //   url:`https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+  //   accounts: [process.env.PRIVATE_KEY],
+  //   chainId: 4,
+  //   gas: "auto",
+  //   gasPrice: "auto",
+  //   gasMultiplier: 1.2
+  // },
+  BSCTestnet: {
+    url: "https://data-seed-prebsc-1-s1.binance.org:8545",
     accounts: [process.env.PRIVATE_KEY],
-    chainId: 4,
+    chainId: 97,
     gas: "auto",
-    gasPrice: "auto",
-    gasMultiplier: 1.2
+		gasPrice: "auto",
+		gasMultiplier: 1.2
   }
   },
 solidity: {
@@ -109,7 +118,7 @@ solidity: {
     //     }
     // },
     {
-      version: "0.8.0",
+      version: "0.7.0",
       settings: {
         optimizer: {
           enabled: true,
@@ -147,8 +156,8 @@ solidity: {
     timeout: 360000
 },
 etherscan: {
-  apiKey: process.env.ETHERSCAN_API_KEY, // ETH Mainnet
-  // apiKey: process.env.BSCSCAN_API_KEY // BSC
+  // apiKey: process.env.ETHERSCAN_API_KEY, // ETH Mainnet
+  apiKey: process.env.BSCSCAN_API_KEY // BSC
 },
 
 contractSizer: {

@@ -2,7 +2,7 @@
 pragma solidity >=0.7.0;
 pragma experimental ABIEncoderV2;
 
-import "./CashToken.sol";
+import "./VoteToken.sol";
 import "./Utils.sol";
 import "./InnerProductVerifier.sol";
 import "./ZetherVerifier.sol";
@@ -12,7 +12,7 @@ contract ZSC {
     using Utils for uint256;
     using Utils for Utils.G1Point;
 
-    CashToken coin;
+    VoteToken coin;
     ZetherVerifier zetherVerifier;
     BurnVerifier burnVerifier;
     uint256 public epochLength;
@@ -31,7 +31,7 @@ contract ZSC {
 
     constructor(address _coin, address _zether, address _burn, uint256 _epochLength) { // visibiility won't be needed in 7.0
         // epoch length, like block.time, is in _seconds_. 4 is the minimum!!! (To allow a withdrawal to go through.)
-        coin = CashToken(_coin);
+        coin = VoteToken(_coin);
         zetherVerifier = ZetherVerifier(_zether);
         burnVerifier = BurnVerifier(_burn);
         epochLength = _epochLength;

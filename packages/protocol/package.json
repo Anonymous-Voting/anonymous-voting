@@ -10,13 +10,17 @@
     "elliptic": "^6.5.1",
     "eslint-import-resolver-lerna": "^1.1.0",
     "openzeppelin-solidity": "4.2.0",
+    "truffle": "^5.4.8",
     "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.4",
+    "web3-utils": "^1.5.2",
     "zeppelin-solidity": "^1.12.0"
   },
   "devDependencies": {
     "@nomiclabs/buidler": "^1.4.8",
-    "@openzeppelin/contracts": "3.1.0-solc-0.7",
+    "@openzeppelin/contracts": "^3.4.2",
+    "@openzeppelin/test-helpers": "^0.5.10",
+    "@openzeppelin/truffle-upgrades": "^1.9.0",
     "eslint": "^5.16.0",
     "ganache-core": "^2.11.2",
     "truffle-plugin-verify": "^0.5.11"
