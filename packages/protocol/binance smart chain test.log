@@ -1,0 +1,82 @@
+Using network 'BSC Testnet'.
+
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+
+  Contract: Voting
+    ✓ Check minting and approving (164645ms)
+Registration submitted (txHash = "0xcc7a48692abc2fa99597218789b06edfa46bf4ec7a927503813456589a405cf0").
+Registration successful.
+Registration submitted (txHash = "0x17685460140cbd52591a30570e2f1df40a33b0a56380ca071e718f20697bc0b2").
+Registration successful.
+Registration submitted (txHash = "0x2e502ab0c226f4b858a7e106e98187ec5be4dfd371a77643308ef25d59ab1919").
+Registration successful.
+Registration submitted (txHash = "0xa6515ef3bbbf80066d845ae9d218e58afba702884da7059fb81cf446833cfdd0").
+Registration successful.
+    ✓ should allow candidate registration (147195ms)
+Registration submitted (txHash = "0x9ae532f3f799915586f39187ee50a6b16a4455c7d0fb37e45ea24e5094984fc2").
+Registration successful.
+Registration submitted (txHash = "0xfe4be6ff7791c489a6f4588258688b252ed857471179ffd8e281d4b721e42c07").
+Registration successful.
+Registration submitted (txHash = "0x96dba3820bb550220665cfdeeefbb301a7ac770c3934295f74780627b6251cd4").
+Registration successful.
+Registration submitted (txHash = "0x432d955974b1ac4cde13802616be9add90ac0df5b7eaded6ff0076d9954b2362").
+Registration successful.
+    ✓ should allow registration (72492ms)
+Initiating.
+Initialization submitted (txHash = "0x97eea44fd274e1ae4760c80d8bade4d1c42f409bb4a8540a3f01cd253fbefc88").
+Initialization of 1 vote was successful. Vote number is now 1.
+Initiating.
+Initialization submitted (txHash = "0x2dbd4bdcc9e0ce951ff892c683c542b84ae443522330f2c5889ef53fd0c695c1").
+Initialization of 1 vote was successful. Vote number is now 1.
+Initiating.
+Initialization submitted (txHash = "0x2ff67a13989b03d7a41f67e284788d165cd7957e82ceee5dad8aa63639926d8b").
+Initialization of 1 vote was successful. Vote number is now 1.
+Initiating.
+Initialization submitted (txHash = "0x79e9e13173861974adc6a2940789837bf3ae13698f8d20b3ecb7e228212172f3").
+Initialization of 1 vote was successful. Vote number is now 1.
+    ✓ should allow initialization (38280ms)
+Registration submitted (txHash = "0x1479122c629037119ac3897e955c8093e803c33bb687abaaac98304aaeec18b3").
+Registration submitted (txHash = "0xb030558a9a42eae88085d93da3c9a9ad8c825953ab2fb5f226706a2de873d8b5").
+Registration successful.
+Registration submitted (txHash = "0x4bd79cc7a51e628cd5b224bf2933aac4cf3be26000bb67880c017bedcd470ef0").
+Registration submitted (txHash = "0x43774521f7f81c407c7d8a30ffd5eae450d2879f31005e8079e7428ddaf14d32").
+Registration submitted (txHash = "0xf8f81c6d91be21c5b4370d4d7ba991b8182c084291368e7553f051bf0a1718f5").
+Registration successful.
+Registration successful.
+Registration successful.
+Registration successful.
+Casting ballot submitted (txHash = "0xe5ed5ee5afb48ab60ed6de6d3361434fd9363e6fb170b019fb0b22c96d201ec4").
+Casting ballot of 1 (with fee of 0) was successful. vote number is now 0.
+Casting ballot submitted (txHash = "0x3206068a49ff7ca294d0a26cf0e1d00a1e24d881176646a4094defe3ec4532d1").
+Casting ballot of 1 (with fee of 0) was successful. vote number is now 0.
+Casting ballot submitted (txHash = "0xb9826abe892745ef8f597f08071a7bf3045e269de0c245ce0d40c3b67ddd3f3f").
+Casting ballot of 1 (with fee of 0) was successful. vote number is now 0.
+Casting ballot submitted (txHash = "0x31d1cc68a9ec5ecfbf8a740ce73f2cd5a06f8f0968b99b72013dec63ae096349").
+Casting ballot of 1 (with fee of 0) was successful. vote number is now 0.
+Account recovered successfully.
+Account recovered successfully.
+Account recovered successfully.
+Account recovered successfully.
+    ✓ should allow voting (264731ms)
+Account recovered successfully.
+Account recovered successfully.
+Account recovered successfully.
+Account recovered successfully.
+Initiating withdrawal.
+Withdrawal submitted (txHash = "0xfe9cf4402a4fb4f051f906d79eeb32139718bceaf3cf5f41274057a63532cdf1").
+Withdrawal of 2 vote was successful. Vote number is now 0.
+Withdrawal submitted (txHash = "0xf39522898a601b1b21733dc5808e28a7914f0a559a7ef6d190bfcae5ede6affd").
+Withdrawal of 1 vote was successful. Vote number is now 0.
+Withdrawal submitted (txHash = "0x265f0aa98079b7e137e2713588c01e46c0c08f2141a79dc89dab548ebf204349").
+Withdrawal of 0 vote was successful. Vote number is now 0.
+Withdrawal submitted (txHash = "0xb5b0db58af428120cf6b6b3c0635f0cd4e0b48f55b21298a26b1bd1b93d4c5e4").
+Withdrawal of 1 vote was successful. Vote number is now 0.
+    ✓ should allow finalize (120431ms)
+
+
+  6 passing (14m)
